@@ -1,0 +1,34 @@
+require 'rubygems'
+require_gem 'rake'
+require 'rake/clean'
+
+base = "./dist/common/depot"
+dist = "#{base}/doc"
+CLEAN << "./dist"
+
+tex_files = FileList["tex/**/*.tex"].exclude /developers\.tex$/
+
+puts tex_files.inspect
+pdfs      = tex_files.ext "pdf"
+sep       = File::PATH_SEPARATOR
+rule ".pdf" => [".tex"] do |tex|
+  mkdir_p dist
+  ENV["TEXINPUTS"] = "#{ENV["TEXINPUTS"]}#{sep}.#{sep}./tex"  
+
+  pdflatex = "pdflatex --output-directory=#{dist} #{tex.source}"
+  begin
+    sh pdflatex
+  ensure # this is because latex sometimes shits itself while building the TOC
+    sh pdflatex
+  end  
+end
+
+task :pdf => pdfs do
+  rm FileList["#{dist}/*.{out,aux,toc,log}"]  
+end
+
+task :package => [:pdf] do
+  cp "license.txt", base
+  cp "README.txt", base
+  cp_r "web", base
+end

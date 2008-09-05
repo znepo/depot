@@ -1,0 +1,72 @@
+<!--  
+   a simple javascript/depot wiki
+  -->
+<html>
+  <head>
+    <script language="javascript" src="../lib/prototype-1.4.0.js"></script>
+    <script language="javascript" src="../lib/depot-client.js"></script>
+    <script language="javascript">
+      
+var wikiPrefix = "/~weeksie/depot/com/snepo/examples/wiki";      
+var pageName   = document.URL.split("?")[1];
+var pageUrl    = wikiPrefix + "/" + pageName;
+ 
+// page depot object initialised with the url of the depot
+// store it is bound to. 
+var page        = new Depot.Object(pageUrl);
+page.onGet      = doPopulate;
+page.onNotFound = newPage;
+
+// callback function that populates the page div 
+// chains another call to page.size();
+function doPopulate(resp, obj) {
+  $('page').innerHTML    = resp.data;
+  $('edit-link').display = 'visible';
+}
+
+// callback that adds a form for creating new page when
+// a page bound to the current URL can't be found
+function newPage(depot, obj) {
+  $('edit-link').display = 'none';
+  $('page').innerHTML    = "<form><textarea cols='40' rows='20' id='wiki-page-create'></textarea>" + 
+	"<br /><input type='submit' value='save'  onclick='createWikiPage();return false;'/></form>";
+}
+
+function createWikiPage() {
+   page.newDirectory();
+   var text = $('wiki-page-create').value;
+   page.create(text);
+   page.getLast();
+}
+
+function editPage() {
+   $('page').innerHTML =
+    "<textarea  cols='40' rows='20' id='wiki-edit'></textarea><br /><input type='submit'" +
+    " onclick='return commitEdit();'" +
+    "value='save' />";
+   page.getLast({onGet: populateEditBox});
+}
+
+function populateEditBox(resp,obj) {
+   $('wiki-edit').value = resp.data;
+}
+
+function commitEdit() {
+   page.create($('wiki-edit').value);
+   page.getLast();
+}
+
+    </script>
+  </head>
+
+  <body onload="page.getLast();">
+    <h1>The Wiki of the 3 Renaldos</h1>
+    <div id="page">      
+    </div>
+    <a id="edit-link" href="javascript:void;"
+    onclick="editPage();return false;">edit</a>
+    <div id="revs">
+      
+    </div>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+--- !ruby/object:DepotTest::Request
+num_requests: 5000
+body: !ruby/symbol random
+strategy: roundtrip
+path: /com/snepo/tests/network/1
+assertions: 
+ put: {code: '201'}
+ get:
+   headers: {content-type: text/xml}
+   body: true
+   code: '200' 
+   xml: true
+
+
+

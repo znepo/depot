@@ -1,0 +1,22 @@
+require_gem 'rake'
+require 'rake/clean'
+
+CLEAN << "./dist"
+
+task :default => :package
+task :package do
+  dist     = "./dist/common/depot/web"
+  
+  js_libs  = FileList["lib/**/*.js"]   
+  wiki     = "examples/wiki/wiki.html"
+  
+  mkdir_p "#{dist}/lib"
+  mkdir_p "#{dist}/wiki"
+  
+  cp wiki,    "#{dist}/wiki"
+
+  js_libs.each {|lib|
+    cp lib, "#{dist}/lib"
+  }
+  
+end

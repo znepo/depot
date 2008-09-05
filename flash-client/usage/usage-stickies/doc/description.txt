@@ -1,0 +1,6 @@
+Depot Usage Example – Desktop “Stickies”
+
+This example uses Depot to store data entered by the user in a free text field, as well as maintaining various properties of the containers in which the data is rendered, including, x position, y position, width, height and colour. Applying this example as 
+an “Active Desktop” allows the user to leave notes on their desktop, similar to “Stickies” in MacOSX.
+
+Create a new Sticky by double-clicking any unoccupied space in the window, and click “Commit Stickies” to save the currently active stickies.

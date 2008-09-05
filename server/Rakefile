@@ -1,0 +1,276 @@
+require 'rubygems'
+require 'fileutils'
+require_gem 'rake'
+require_gem 'haskell_task'
+
+include FileUtils
+
+#
+# TODO change the build functions into proper rake tasks so that they
+# don't rebuild resources unnecessarily. Perhaps pull windows and mac
+# (and *nux) code out into their own directories.
+# 
+
+WIN_INST_DIST = "./dist/win_xp"
+MAC_INST_DIST = "./dist/mac_osx"
+LIN_INST_DIST = "./dist/linux"
+
+WIN_INST_BASE = "#{WIN_INST_DIST}/depot"
+MAC_INST_BASE = "#{MAC_INST_DIST}/depot"
+LIN_INST_BASE = "#{LIN_INST_DIST}/depot"
+
+MAC_DIST_FILE = "#{MAC_INST_DIST}/depot.dmg"
+WIN_DIST_FILE = "#{WIN_INST_DIST}/install-depot.exe"
+LIN_DIST_FILE = "#{LIN_INST_DIST}/depot.tar.gz"
+DOCS          = [] #"doc/wiki-tutorial.pdf", "doc/users.pdf"]
+LICENSE       = "doc/license.txt"
+README        = "doc/README.txt"
+
+MAC_C_FILES   = ["depot_logger.c"]
+WIN_C_FILES   = ["depotsvc.c", "depot_logger.c"]
+
+MAC_FILES     = FileList["installers/mac_osx/depot/**/*"].exclude(/\.svn$/)
+WIN_FILES     = FileList["installers/win_xp/depot/**/*"].exclude(/\.svn$/)
+
+COMMON_FILES  = FileList["installers/common/depot/**/*"].exclude(/\.svn$/)
+COMMON_WIN    = COMMON_FILES.sub(/^installers\/common/,WIN_INST_BASE)
+
+PACKAGE_DIRS  = ["conf","bin","data","logs"]
+
+
+def windows?
+  RUBY_PLATFORM =~ /win32/i 
+end
+
+def macos?
+  RUBY_PLATFORM =~ /darwin/i   
+end
+
+def linux?
+  RUBY_PLATFORM =~ /linux/i   
+end
+
+MAC_DEV_DIR   = File::expand_path "~/depot-dev" if macos?
+
+def platform(plat_hash)
+  if windows?
+    plat_hash[:windows].call
+  elsif macos?
+    plat_hash[:macos].call
+  elsif linux?
+    plat_hash[:linux].call
+  end
+end
+
+def cfiles
+  platform :windows => lambda{WIN_C_FILES},
+           :macos   => lambda{MAC_C_FILES},
+           :linux   => lambda{MAC_C_FILES}
+end
+
+def ofiles
+  cfiles.collect {|fn| File::join("dist/build",o_for_c(fn))}
+end
+
+# TODO, move the resource copying code to a seperate function
+# and pass the OS specific files as args.
+def package_macos
+  lambda {
+    mkdir_p MAC_INST_BASE
+    
+    # prepare the staging directories
+    PACKAGE_DIRS.each {|dir|
+      mkdir_p "#{MAC_INST_BASE}/#{dir}"
+    }
+    
+    MAC_FILES.each {|f|
+      if File::directory? f
+        mkdir_p f.sub(/^installers\/mac_osx\/depot/,MAC_INST_BASE)
+      else
+        cp f, f.sub(/^installers\/mac_osx\/depot/,MAC_INST_BASE)
+      end
+    }    
+    
+    copy_common_files MAC_INST_BASE
+    
+    # copy files
+    cp "dist/depot", "#{MAC_INST_BASE}/bin"
+    cp "dist/depot-http", "#{MAC_INST_BASE}/bin"
+
+    if ENV["DEVEL"]
+      rm_rf MAC_DEV_DIR
+      cp_r MAC_INST_BASE, MAC_DEV_DIR
+    end
+  }
+end
+
+def package_lin
+  lambda {
+    PACKAGE_DIRS.each {|dir|
+      mkdir_p "#{LIN_INST_BASE}/#{dir}"
+    }
+    copy_common_files LIN_INST_BASE
+    
+    cp "dist/depot", "#{LIN_INST_BASE}/bin"
+    cp "dist/depot-http", "#{LIN_INST_BASE}/bin" 
+  }
+end
+
+def package_win
+  lambda {
+    
+    
+    PACKAGE_DIRS.each {|dir|
+      mkdir_p "#{WIN_INST_BASE}/#{dir}"
+    }
+    copy_common_files WIN_INST_BASE
+    
+    WIN_FILES.each {|f|
+      if File::directory? f
+        mkdir_p f.sub(/^installers\/win_xp\/depot/,WIN_INST_BASE)
+      else
+        cp f, f.sub(/^installers\/win_xp\/depot/,WIN_INST_BASE)
+      end
+    }
+    
+    mv "dist/depot.exe", "#{WIN_INST_BASE}/bin"
+    mv "dist/depot-http.exe", "#{WIN_INST_BASE}/bin"
+    
+  }
+end
+
+def copy_common_files(targ)
+    COMMON_FILES.each {|f| 
+      if File::directory? f
+        mkdir_p f.sub(/^installers\/common\/depot/,targ)
+      else
+        cp f, f.sub(/^installers\/common\/depot/,targ)
+      end      
+    }
+end
+
+class GhcBuildCmd
+  attr_accessor :is_demo, :is_debug, :demo, :debug, :main, :src, :dist, :opts, :obj_links
+  def initialize
+    @is_demo   = ENV["DEMO"]
+    @is_debug  = ENV["DEBUG"]
+    @dist      = "dist"
+    @demo      = "-DDEMO=TRUE"
+    @debug     = "-DDEBUG=TRUE"
+    @opts      = "-cpp -funbox-strict-fields"    
+    @obj_links = ofiles.join ' '
+  end
+  def to_s
+    self.opts = "#{opts} #{demo}" if is_demo
+    self.opts = "#{opts} #{debug}" if is_debug
+    "ghc --make #{main} -o a.out #{obj_links} -static -i#{src} -odir #{dist}/build -hidir #{dist}/build #{opts}"
+  end
+end
+
+def build_win
+  lambda {
+    ghc       = GhcBuildCmd.new    
+    ghc.main  = "src\\depot\\Main.hs"
+    ghc.src   = "src\\depot"
+    ghc.opts += " -Isrc\\depot -Lsrc\\depot"
+    sh ghc.to_s
+    mv "a.out", "#{ghc.dist}\\depot.exe"
+    
+    ghc.obj_links = "dist\\build\\depot_logger.o"
+    ghc.src       = "src\\depot-http;src\\depot"
+    ghc.main      = "src\\depot-http\\Main.hs"    
+    sh ghc.to_s
+    mv "a.out", "#{ghc.dist}\\depot-http.exe"
+  }
+end
+
+def build_mac
+  lambda {
+    ghc      = GhcBuildCmd.new    
+    ghc.main = "src/depot/Main.hs"
+    ghc.src  = "src/depot"
+    sh ghc.to_s
+    mv "a.out", "#{ghc.dist}/depot"    
+    ghc.src  = "src/depot-http:src/depot"
+    ghc.main = "src/depot-http/Main.hs"
+    puts `#{ghc}`
+    mv "a.out", "#{ghc.dist}/depot-http"
+  }
+end
+
+def o_for_c(cfile)
+  File::basename(cfile.sub(/\.c$/,'.o'))
+end
+
+def local_install_win
+  lambda {
+    cp_r "./dist/win_xp/depot", "c:\depot"
+  }
+end
+
+task :default => :build
+
+htask = Haskell::HaskellTask.new("depot") do |t|
+  t.ghc_opts << "-funbox-strict-fields"  
+  t.c_files  << "src/depot/depot_logger.c"
+end
+
+task :build => [:clean_c, :build_c] do
+   platform :windows => build_win,
+          :macos   => build_mac,
+          :linux   => build_mac
+end
+
+task :compile_depot do
+  puts "COMPILING DEPOT"
+  htask.name = "depot"  
+  htask.define
+  Rake::Task[:'hs:compile'].invoke
+end
+
+task :compile_http do
+  Rake::Task::clear
+  puts "COMPILING HTTP"
+  htask.name = "depot-http"
+  htask.define
+  Rake::Task[:'hs:compile'].invoke  
+end
+
+task :build_c do
+  mkdir_p "dist/build"
+  cfiles.each do |fn|
+    sh "ghc -isrc/depot -o dist/build/#{o_for_c(fn)} -c -fffi -cpp src/depot/#{fn} -Ldist/build/ -Isrc/depot"
+  end
+  
+end
+
+# must be run EVERY time because the compilation for c files is a
+# different stage then the GHC compilation. It's easy to get them out
+# of sync. Anyway the c compile should ALWAYS be ultra quick anyway.
+task :clean_c do
+  obj_files = FileList["dist/build/*.o"]
+  rm obj_files
+end
+
+task :clean do
+  rm_rf "dist"
+end
+
+             
+desc "Moves all distributable depot files into ./dist/OSNAME/depot"             
+task :package => [:build,:clean_packages] do
+  platform({:windows => package_win,
+           :macos   => package_macos,
+           :linux => package_lin})
+end
+
+desc "Moves depot files to their default installation location (for development)"             
+task :local_install => [:package] do
+  platform :windows => local_install_win
+end
+             
+task :clean_packages do
+  platform :windows => lambda {rm_rf WIN_INST_DIST},
+           :macos   => lambda {rm_rf MAC_INST_DIST},
+           :linux   => lambda {rm_rf LIN_INST_DIST}
+end

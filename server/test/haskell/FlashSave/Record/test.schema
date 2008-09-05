@@ -1,0 +1,8 @@
+-- The syntax of the file is: 
+-- idx name:key type: value type [:order=50] 
+-- order must be >= 2
+test1:int:int
+test2:str:ptr
+test3:str:[ptr]
+test4:str:[ptr]:4
+test5:ptr:int

@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{snepospec}
+
+\begin{document}
+
+\section{depot Developer's Guide}
+
+\paragraph{}
+So you want to build a depot client? The easy thing to do would be to
+kill a man with a pitchfork and then wrap him in cheesecloth. Barring
+that, here's how to go about it
+
+\paragraph{}
+Depot is an HTTP server, all depot commands are proper HTTP requests
+and delivered as HTTP responses \footnote{There are plans in the works
+  to expose various depot API's so that developers can write direct
+  bindings. If you are interested, please contact us at
+  developers@snepo.com for more information}. This presents a
+particularly easy path if the language you are developing in already
+provides HTTP client libraries (most do). Those developing their
+own HTTP libraries as well will benefit from reading the Appendix. % TODO
+
+HTTP Content is served by depot over the following request methods
+
+\snepolistbox{
+  \item GET
+  \item PUT
+  \item DELETE
+  \item \textit{TODO: OPTIONS}
+}
+
+The standard HTTP method POST is treated as a PUT for the time being. 
+
+\section{GETting data from depot}
+\paragraph{}
+
+\end{document}
+
+

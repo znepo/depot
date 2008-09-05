@@ -1,0 +1,1 @@
+copy C:\workspace\snepo-depot\server\trunk\installers\windows\install-depot.exe Y:\drop-box\depot-nightly-build

@@ -1,0 +1,8 @@
+require 'rubygems'
+require_gem 'rake'
+require 'lib/distribution_task' # task specific to depot
+
+
+Snepo::DistributorTask.new "1.2.1"
+
+task :package => [:'depot:stage',:'depot:package']

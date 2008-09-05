@@ -1,0 +1,46 @@
+require 'rubygems'
+require_gem 'rake'
+require_gem 'snepo_generator'
+
+include Snepo
+
+usage_files = []
+
+def copy_to(file_list, to_dir,trim_path = nil)
+  file_list.each {|file|
+    targ = "#{to_dir}/#{file}"
+    targ.sub! trim_path, "" if trim_path
+#     targ.gsub! /\s/, "\\ "
+#     file.gsub! /\s/, "\\ "
+    
+    if File::directory?(file)      
+      mkdir_p targ 
+    else
+      cp file, targ 
+    end
+  }
+end
+
+task :default => :package
+task :package do
+  dist_common = "./dist/common/depot/flash"
+  dist_win    = "./dist/win_xp/depot/flash"
+  dist_mac    = "./dist/mac_osx/depot/flash"
+  
+  mkdir_p [dist_common,dist_win,dist_mac]
+  
+  flash_libs  = FileList["com/**/*"].exclude /\.svn$/   
+  win_exes    = FileList["staging/win_xp/**/*"].exclude /\.svn$/
+  mac_exes    = FileList["staging/mac_osx/**/*"].exclude /\.svn$/
+  com_exes    = FileList["staging/common/**/*"].exclude /\.svn$/
+  copy_to flash_libs, dist_common
+  copy_to com_exes, dist_common, "staging/common/"
+  copy_to mac_exes, dist_mac, "staging/mac_osx/"
+  copy_to win_exes, dist_win, "staging/win_xp/"
+  
+  usage_files << "./usage/usage-comments/flash-tutorial.fla"
+  
+  mkdir_p "#{dist_common}/examples"
+  cp usage_files, "#{dist_common}/examples"
+  cp "depot.mxp", "#{dist_common}"
+end

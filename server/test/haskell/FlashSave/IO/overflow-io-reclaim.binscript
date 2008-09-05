@@ -1,0 +1,68 @@
+
+{ 
+ This script is to test the spanning reclamation algorithm and should
+ be used in conjunction with overflow-io.binscript
+ };
+
+int1:23;
+{ head };
+
+int1:1;
+ptr,ptr,ptr;
+
+{ spans };
+int4:4;
+ptr:(1 0);
+int4:10;
+ptr:(2 0);
+int4:3;
+ptr:(2 75);
+int4:11;
+ptr:(3 0);
+int4:3;
+
+
+jump:(1 0);
+
+int4:13;
+num:10000000000;
+num:10000000001;
+num:10000000002; 
+num:10000000003;
+num:10000000004;
+num:10000000005;
+num:10000000006;
+num:10000000007;
+num:10000000008;
+num:10000000009;
+
+
+jump:(2 0);
+
+num:10000000010;
+num:10000000011;
+num:10000000012;
+
+int4:14;
+ptr:(0 1);
+ptr:(0 2);
+ptr:(0 3);
+ptr:(0 4);
+ptr:(0 5);
+ptr:(0 6);
+ptr:(0 7);
+ptr:(0 8);
+ptr:(0 9);
+ptr:(0 10);
+ptr:(0 11);
+
+jump:(3 0);
+ptr:(0 12);
+ptr:(0 13);
+ptr:(0 14);
+
+
+{ SUCCESS };;
+
+
+

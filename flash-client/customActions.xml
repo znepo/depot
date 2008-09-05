@@ -1,0 +1,52 @@
+<customactions>
+  <actionspanel>
+     <folder name="Snepo Depot" id="Snepo Depot" tiptext="" VERSION="7">
+            <string name="Depot" helpurl="" tiptext="" TEXT="(%host:String, port:Number)" TYPE="procedure" OBJECT="MovieClip" VERSION="7"/>
+            <string name="create" helpurl="" tiptext="" TEXT=".create (%url:String, data:Object, name:String, contentType:String, id:Number)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="get" helpurl="" tiptext="" TEXT=".get (%url:String, id:Number, meta:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="getFirst" helpurl="" tiptext="" TEXT=".getFirst (%url:String, meta:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="getLast" helpurl="" tiptext="" TEXT=".getLast (%url:String, meta:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="remove" helpurl="" tiptext="" TEXT=".remove (%url:String, id:Number)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="newDirectory" helpurl="" tiptext="" TEXT=".newDirectory (%url:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="destroy" helpurl="" tiptext="" TEXT=".destroy (%url:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="restore" helpurl="" tiptext="" TEXT=".restore (%url:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="authorize" helpurl="" tiptext="" TEXT=".authorize (%username:String, password:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="getPermissions" helpurl="" tiptext="" TEXT=".getPermissions (%username:String, id:Number, username:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="onConnect" helpurl="" tiptext="" TEXT=".onConnect (%event:Object)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="onError" helpurl="" tiptext="" TEXT=".onError (%event:Object)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="onGet" helpurl="" tiptext="" TEXT=".onGet (%event:Object)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="onCreate" helpurl="" tiptext="" TEXT=".onCreate (%event:Object)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="onCreateDirectory" helpurl="" tiptext="" TEXT=".onCreateDirectory (%event:Object)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="onDelete" helpurl="" tiptext="" TEXT=".onDelete (%event:Object)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="destroyAuthentication" helpurl="" tiptext="" TEXT=".destroyAuthentication ()" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="putPermissions" helpurl="" tiptext="" TEXT=".putPermissions (%url:String, id:Number, username:String, password:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+			<string name="putUser" helpurl="" tiptext="" TEXT=".putUser (%username:String, password:String)" TYPE="procedure" OBJECT="Depot" VERSION="7"/>
+
+			
+      </folder>
+  </actionspanel>
+  <colorsyntax>
+	  <identifier text="Depot"/>
+	  <identifier text=".create"/>
+	  <identifier text=".get"/>
+	  <identifier text=".getFirst"/>
+	  <identifier text=".getLast"/>
+	  <identifier text=".remove"/>
+	  <identifier text=".newDirectory"/>
+	  <identifier text=".destroy"/>
+	  <identifier text=".restore"/>
+	  <identifier text=".authorize"/>
+	  <identifier text=".getPermissions"/>
+	  <identifier text=".onConnect"/>
+	  <identifier text=".onError"/>
+	  <identifier text=".onGet"/>
+	  <identifier text=".onCreate"/>
+	  <identifier text=".onCreateDirectory"/>
+	  <identifier text=".onDelete"/>
+	  <identifier text=".destroyAuthentication"/>
+	  <identifier text=".putPermissions"/>
+	  <identifier text=".putUser"/>
+	  <identifier text=".debug"/>
+	  <identifier text=".connectionState"/>
+  </colorsyntax>
+</customactions>

@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <title>The Wiki of The Three Renaldos</title>
+    <script language="javascript" src="../lib/prototype-1.4.0.js"></script>
+    <script language="javascript" src="../lib/depot-client.js"></script>
+    <script language="javascript">
+      var wikiPrefix = "/depot/com/snepo/examples/wiki";
+      var urlValue   = document.URL.split("?");
+      var pageName   = "";
+      if(urlValue[1]) {
+        pageName          = urlValue[1];
+      } else {
+        document.location = document.location + "?Home";
+      }
+      var pageUrl    = wikiPrefix + "/" + pageName;
+      var page       = new Depot.Object(pageUrl);
+
+      page.onNotFound  = newPage;
+      page.onGet       = populatePage;
+      page.onCreate    = function() {page.getLast();}
+      
+      function newPage(response, headers) {
+        $('edit-link').display = 'none';
+        $('page').innerHTML    = 
+        "<form><textarea cols='40' rows='20' " + 
+	"id='edit-wiki'></textarea><br /><input " + 
+	"type='submit' value='save' " + 
+        "onclick='createWikiPage(); return false;' /></form>";
+      }      
+      function populatePage(response, headers) {
+        $('page').innerHTML    = wikiLink(response.data);
+        $('edit-link').display = 'visible';
+        page.size({onGet: showRevs});
+      }
+      function createWikiPage() {
+        page.newDirectory({onCreate: savePage});
+      }
+      function savePage() {
+        page.create($('edit-wiki').value);
+      }
+      function editPage() {
+        $('page').innerHTML = 
+        "<form><textarea cols='40' rows='20' " + 
+	"id='edit-wiki'></textarea><br /><input " + 
+	"type='submit' value='save' " + 
+        "onclick='savePage(); return false;' /></form>";
+        page.getLast({onGet: populateEditBox});
+      }            
+      function populateEditBox(response, headers) {
+        $('edit-wiki').value = response.data;
+      }
+      function showRevs(response, headers) {
+        var prevLink        = "<a href='javascript:void;'" + 
+     " onclick='viewPrevious();return false;'>view previous?</a>";
+        $('revs').innerHTML = response.directorySize + " revisions, " + prevLink;
+      }      
+      function viewPrevious() {
+        page.getAll({onGet: showPreviousLinks});
+      }      
+      function showPreviousLinks(response,headers) {
+        var lis = "";
+        // check to see if response is an Array
+        // queries like getAll return an Array of results 
+        // if more than 1 item is in the directory
+        if(response.each) {
+          var revisionListItems = $A([]);
+          response.each(function(d) {
+              revisionListItems.push(makeRevisionListItem(d));
+          });      
+          lis = revisionListItems.join("");
+        } else {
+          lis = makeRevisionListItem(response);
+        }
+        $('page').innerHTML = "<ul>" + lis + "</ul>";
+      }
+      function makeRevisionListItem(revResponse) {
+        return "<li><a href='javascript:void;' " + 
+	 "onclick='page.get(" + revResponse.objectId + "); return false'> Revision " + 
+	  revResponse.objectId + "</a></li>";
+      }
+      var wikiWord = /\b(([A-Z][a-z]+){2,})\b/g;
+      function wikiLink(text) {
+        return text.replace(wikiWord, "<a href='?$1'>$1</a>");
+      }
+    </script>
+  </head>
+  <body onload="page.getLast();">
+    <h1>The Wiki of the 3 Renaldos</h1>
+
+    <div id="page"></div>
+    <a id="edit-link"
+       href="javascript:void;" onclick="editPage();return false;">edit</a>
+    <div id="revs"></div>
+
+  </body>
+</html>

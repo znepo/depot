@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<macromedia-extension name="Depot Explorer" version="1.2.1" type="flash panel" requires-restart="true">
+
+	<!-- Describe the extension -->
+
+	<license-agreement>
+		<![CDATA[Snepo - Software License Agreement<br><br>Please read the terms and conditions of this license agreement (the 'License') before installing the computer software (the 'Software'). By installing and using the Software you accept and agree to the terms of this License. This License constitutes the entire agreement concerning the Software between you and Snepo and it supersedes any prior proposal or representation. If you do not agree with these terms and conditions, promptly de-install the Software and, if you paid for a License, contact your distributor for a refund of the amount that you paid.<br><br>The term 'Software' includes, and these terms and conditions also apply to, any updates, modifications and upgrades to the Software that you may receive from time to time.<br><br>1. License Grant.<br>This License permits you, as purchaser of the Software, to use one copy of the Software solely for your use on one computer per purchased copy of the software, or, for users of Windows Terminal Server ('WTS'), solely for use by users covered under the WTS License. The enclosed documentation ('Documentation') may not be copied. You agree that you will not sublicense, assign, transfer, distribute, pledge, lease, rent or share your rights under this License except with prior written permission from Snepo. You agree that you will not modify, adapt or translate, or disassemble, decompile, reverse engineer or otherwise attempt to discover the source code of the Software.<br><br>2. Snepo's Rights.<br>You acknowledge and agree that the Software and Documentation (the 'Licensed Products') are proprietary products of Snepo under international copyright law and disclosed to you by Snepo in confidence. You shall take all reasonable steps to safeguard the Licensed Products. Snepo owns and retains all copyright, trademark, trade secret and other proprietary rights in and to the Licensed Products. This License conveys to you only a non-exclusive and limited right of use, revocable in accordance with the terms and conditions of this License.<br><br>3. Service Level Agreements.<br>Support services may be purchased under separate agreement with Snepo.<br><br>4. Limited Warranty.<br>Snepo warrants that for your benefit alone, for ninety (90) days from the day of delivery to you (the 'Warranty Period') the Software, when used in accordance with the supporting documentation in a compatible execution environment, will be free from defects in material and workmanship. Any replacement program will be warranted for the remainder of the original warranty period or thirty (30) days from the date of receipt by you, whichever is longer. In no event may you bring any claim, action or proceeding arising out of the warranty set forth in this Article 5 more than six (6) months after the date on which the breach of warranty occurred.<br><br>5. Exceptions to Warranties; Disclaimers.<br>EXCEPT FOR THE ABOVE EXPRESS LIMITED WARRANTY, Snepo DISCLAIMS ANY AND ALL OTHER WARRANTIES, EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR PARTICULAR PURPOSE. Snepo does not warrant that the Software, its use, operation or your ability to use the Software will be uninterrupted or error-free or that all Software errors will be corrected. The warranty set forth above shall not apply to any defect or problems caused by any defect in any hardware or software used in combination with the Software, or use of the Software in execution environments not specified in the Documentation. Snepo does not warrant that the Software or service will meet your requirements or that the operation of the Software will be uninterrupted or error free.<br><br>Snepo provides no remedies or warranties, whether express or implied, for any sample application code and trial version of the Software. Any sample application code and trial version of the Software are provided 'AS IS'. 'Trial Version' means a version of the Software, so identified, to be used only to review, demonstrate and evaluate the Software. <br><br>Snepo's limited warranty is void if a breach of the warranty has resulted from (i) accident, corruption or misuse of the Software; or (ii) acts or omissions by someone other than Snepo.<br><br>6. Refund Policy.<br>Snepo will refund the full price of the Software if the Software, when used in accordance with the supporting documenation is damaged or defective, and only if you notify Snepo of the refund request within fourteen (14) days of the date you purchased the Software.<br><br>7. Exclusive Remedies.<br>You agree that if, during the Warranty Period, a defect in the Software media appears, your exclusive remedy will be, in Snepo's sole option, to replace the media or to credit the amounts paid by you to Snepo, if any, and terminate this License. The later remedy is subject to the return of all copies of the Licensed Products.<br><br>8. Limitations of Liability.<br>In no event shall Snepo be liable for any loss (direct or indirect), cost or damage (including property damage) to you or a third party whether based in contract, tort, statute or otherwise. This includes but is not limited to loss of data, profits or business or other special, incidental, exemplary or consequential damages, even if Snepo has been advised of the possibility of such loss or damages. Snepo's cumulative liability shall not exceed the license fee paid, if any, for use of this Software and Documentation. This section shall survive termination of this License.<br><br>9. Termination.<br>This agreement is in effect until terminated. You may terminate the agreement at any time by destroying all copies of the Software and Documentation and erasing any copies on storage media. The agreement also terminates if you fail to comply with any terms and conditions of this agreement. In such event, you agree to destroy and erase all copies of the Software and Documentation, and Snepo will be entitled to all remedies in accordance with applicable law.<br><br>10. General.<br>This agreement shall be governed by the laws of Australia.<br><br>11. Contact.<br>Use of the Software other than for your internal operations on a single computer requires that you have entered into a separate license agreement with Snepo. Please e-mail info@snepo.com for further information.]]>
+	</license-agreement>
+
+	<!-- Describe the author -->
+
+	<author name="Snepo Research PTY LTD" />
+
+	<!-- List the required/compatible products -->
+
+	<products>
+		<product name="Flash" version="7" primary="true" />
+	</products>
+
+	<!-- Describe the extension -->
+
+	<description>
+		<![CDATA[Depot Explorer is a graphical interface to the Depot server.<br>It can run as a stand alone application or inside the Flash IDE. ]]>
+	</description>
+
+	<!-- Describe where the extension shows in the UI of the product -->
+
+	<ui-access>
+		<![CDATA[Access to the command panel is by selecting 'Window > Other Panels   > Depot Explorer]]>
+	</ui-access>
+
+	<!-- Describe the files that comprise the extension -->
+
+	<files>
+		<file name="Depot Explorer.swf" destination="$flash/WindowSWF/" />
+		<file name="com\snepo\depot\Depot.as" destination="$flash/Classes/com/snepo/depot/" />
+		<file name="com\snepo\depot\Errors.as" destination="$flash/Classes/com/snepo/depot/" />
+		<file name="com\snepo\lib\authentication\AuthenticationHeader.as" destination="$flash/Classes/com/snepo/lib/authentication/" />
+		<file name="com\snepo\lib\iso\ISO.as" destination="$flash/Classes/com/snepo/lib/iso/" />
+		<file name="com\snepo\lib\managers\Stack.as" destination="$flash/Classes/com/snepo/lib/managers/" />
+		<file name="com\snepo\lib\protocols\HTTPDelete.as" destination="$flash/Classes/com/snepo/lib/protocols/" />
+		<file name="com\snepo\lib\protocols\HTTPGet.as" destination="$flash/Classes/com/snepo/lib/protocols/" />
+		<file name="com\snepo\lib\protocols\HTTPRequest.as" destination="$flash/Classes/com/snepo/lib/protocols/" />
+		<file name="com\snepo\lib\protocols\HTTPResponse.as" destination="$flash/Classes/com/snepo/lib/protocols/" />
+		<file name="com\snepo\lib\protocols\HTTPPut.as" destination="$flash/Classes/com/snepo/lib/protocols/" />
+		<file name="com\snepo\lib\protocols\Request.as" destination="$flash/Classes/com/snepo/lib/protocols/" />
+		<file name="com\snepo\lib\serialization\Marshaler.as" destination="$flash/Classes/com/snepo/lib/serialization/" />
+		<file name="com\snepo\lib\serialization\Serializer.as" destination="$flash/Classes/com/snepo/lib/serialization/" />
+		<file name="com\snepo\lib\utils\md5.as" destination="$flash/Classes/com/snepo/lib/utils/" />
+		<file name="com\snepo\lib\utils\ToolTip.as" destination="$flash/Classes/com/snepo/lib/utils/" />
+		<file name="com\snepo\lib\utils\ChunkDecoder.as" destination="$flash/Classes/com/snepo/lib/utils/" />
+		<file name="com\snepo\lib\utils\Utils.as" destination="$flash/Classes/com/snepo/lib/utils/" />
+		<file name="customActions.xml" destination="$flash/ActionsPanel/CustomActions/" />
+		<file name="Depot Connector.swc" destination="$flash/Components/Snepo" />
+	</files>
+
+</macromedia-extension>

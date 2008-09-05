@@ -1,0 +1,68 @@
+{
+
+  ***************************************************
+  A 5 entry root leaf node with key sizes of 25 bytes 
+  and a block size of 96
+
+}
+
+{ BLOCK HEADER (71 bytes) } ;
+int1:23;
+bool:true ;
+ptr:(1 0) ;
+int1:2, { leaf byte } ;
+ptr,ptr,ptr { -> par prev next};
+
+{NBJ and Length (8 bytes) };
+int4:0, {nbj};
+int4:4, {len};
+
+{ BEGIN LEAF } ;
+jump:(1 0);
+
+{ BLOCK PREFIX (23) bytes };
+int1:23;
+bool:true;
+ptr:(2 0);
+
+int4:2, {nbj 4 bytes};
+num:10000000000, { first key };
+num:10000000001, { snd key };
+
+jump:(2 0);
+
+int1:23;
+bool:true;
+ptr:(3 0) ;
+int4:2, {nbj};
+
+num:10000000002, { first key };
+num:10000000003, { snd key };
+
+{SHOULD BE A JUMP TO (3 0) !!};
+jump:(3 0);
+int1:23;
+bool:true;
+ptr:(4 0) ;
+int4:1, {nbj};
+
+
+num:10000000004, { first key };
+
+{ VALUES (block pointers start here) };
+
+int4:2;
+int4:5;
+ptr:(10 0);
+ptr:(11 0);
+
+jump:(4 0);
+int1:23;
+bool:false;
+ptr:nil;
+int4:3;
+
+ptr:(12 0),ptr:(13 0),ptr:(14 0);
+;;
+{ SUCCESS!!! }
+;;;

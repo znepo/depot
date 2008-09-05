@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <script language="javascript" src="../lib/prototype-1.4.0.js">
+      
+    </script>
+    <script language="javascript" src="../lib/depot-client.js">
+      <!-- -->
+    </script>
+    <script language="javascript">
+      
+    var tst = new Depot.Object("/depot/a/path/somewhere");
+//    tst.newDirectory({onCreate: addEntry});
+    tst.update(1,"FOO",{onCreate: deleteEntry});
+    function addEntry() {
+      tst.create("FOO",{onCreate: deleteEntry});
+    }
+    function deleteEntry() {
+      tst.destroy(1);
+    }
+    </script>
+  </head>
+
+  <body>
+    
+    <button onclick="doget();">get</button>    
+    <button onclick="doput('outbound');">put</button>    
+    <br />    
+    <input type="text" id="outbound" />
+    <br />    
+    <div id="result">
+      Foo here and shit.
+    </div>    
+  </body>
+</html>
